@@ -35,7 +35,8 @@ import { ref } from "vue";
 import axios from "axios";
 import _ from "lodash";
 import type { BlacklistRes, Blacklist } from "@/types";
-
+import { indexStore } from "@/stores";
+const { showMsg } = indexStore();
 const itemsPerPage = ref(5);
 const headers = ref([
   { key: "id", title: "ID" },
@@ -72,8 +73,9 @@ const loadItems = _.throttle(
       loading.value = false;
       serverItems.value = data.data.peoples;
       totalItems.value = data.data.totalCount;
-    } catch (err) {
+    } catch (err: any) {
       loading.value = false;
+      showMsg(err.response.data.msg || err.message);
       console.error(err);
     }
   },
