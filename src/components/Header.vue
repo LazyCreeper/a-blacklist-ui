@@ -15,7 +15,27 @@
       ></v-btn>
 
       <v-spacer></v-spacer>
-      <div class="d-flex align-center" style="cursor: pointer">
+      <div
+        v-if="user.isLogin"
+        class="d-flex align-center"
+        style="cursor: pointer"
+      >
+        <div class="mr-4">{{ user.userInfo?.username }}</div>
+        <v-avatar
+          class="me-4"
+          color="grey-darken-1"
+          :image="`https://cdn.imlazy.ink:233/avatar/${md5(
+            user.userInfo?.email ?? ''
+          )}?s=100&r=R&d=`"
+          size="32"
+        ></v-avatar>
+      </div>
+      <div
+        v-else
+        class="d-flex align-center"
+        style="cursor: pointer"
+        @click="toLogin()"
+      >
         <div class="mr-4">未登录</div>
         <v-avatar
           class="me-4"
@@ -29,6 +49,9 @@
 </template>
 
 <script setup lang="ts">
+import md5 from "md5";
+import { userStore } from "@/stores/user";
+const user = userStore();
 const links = [
   {
     name: "首页",
@@ -39,6 +62,11 @@ const links = [
     to: "about",
   },
 ];
+
+const toLogin = () => {
+  window.location.href =
+    "https://api.imlazy.ink/#/oauth2/authorize?client_id=12&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A1238%2F#/oauth2/callback";
+};
 </script>
 
 <style lang="scss" scoped>

@@ -20,3 +20,17 @@ export interface Blacklist {
   reason: string;
   addTime: string;
 }
+
+export interface UserInfoRes extends NyaResponse {
+  data: UserInfo;
+}
+
+export interface UserInfo {
+  id: number;
+  username: string;
+  uuid: string;
+  status: number;
+  role: string;
+  email: string;
+  regTime: string;
+}

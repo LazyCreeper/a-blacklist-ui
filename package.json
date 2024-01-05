@@ -11,10 +11,12 @@
   "dependencies": {
     "@mdi/font": "7.0.96",
     "@types/lodash": "^4.14.202",
+    "@types/md5": "^2.3.5",
     "@vueuse/router": "^10.7.1",
     "axios": "^1.6.4",
     "core-js": "^3.34.0",
     "lodash": "^4.17.21",
+    "md5": "^2.3.0",
     "pinia": "^2.1.7",
     "roboto-fontface": "*",
     "vue": "^3.3.0",
