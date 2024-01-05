@@ -2,6 +2,17 @@
 <template>
   <v-container>
     <v-responsive class="fill-height">
+      <v-text-field
+        v-model:model-value="search"
+        class="mt-2"
+        label="搜索"
+        clearable
+        density="compact"
+        variant="outlined"
+        append-inner-icon="mdi-magnify"
+        hide-details
+      ></v-text-field>
+
       <v-data-table-server
         v-model:items-per-page="itemsPerPage"
         :headers="headers"
@@ -22,6 +33,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import axios from "axios";
+import _ from "lodash";
 import type { BlacklistRes, Blacklist } from "@/types";
 
 const itemsPerPage = ref(5);
@@ -35,32 +47,36 @@ const search = ref("");
 const serverItems = ref<Blacklist[]>([]);
 const loading = ref(false);
 const totalItems = ref(10);
-const loadItems = async ({
-  page,
-  itemsPerPage,
-  sortBy,
-}: {
-  page: number;
-  itemsPerPage: number;
-  sortBy: Array<{ key: string; order: string }>;
-}) => {
-  try {
-    loading.value = true;
-    const { data }: { data: BlacklistRes } = await axios.get("/v1", {
-      params: {
-        page,
-        pageSize: itemsPerPage,
-        sortBy: sortBy.length > 0 ? sortBy[0].key : "id",
-        sortDesc: sortBy.length > 0 ? sortBy[0].order === "desc" : false,
-        search: search.value,
-      },
-    });
-    loading.value = false;
-    serverItems.value = data.data.peoples;
-    totalItems.value = data.data.totalCount;
-  } catch (err) {
-    loading.value = false;
-    console.error(err);
-  }
-};
+
+const loadItems = _.throttle(
+  async ({
+    page,
+    itemsPerPage,
+    sortBy,
+  }: {
+    page: number;
+    itemsPerPage: number;
+    sortBy: Array<{ key: string; order: string }>;
+  }) => {
+    try {
+      loading.value = true;
+      const { data }: { data: BlacklistRes } = await axios.get("/v1", {
+        params: {
+          page,
+          pageSize: itemsPerPage,
+          sortBy: sortBy.length > 0 ? sortBy[0].key : "id",
+          sortDesc: sortBy.length > 0 ? sortBy[0].order === "desc" : false,
+          search: search.value,
+        },
+      });
+      loading.value = false;
+      serverItems.value = data.data.peoples;
+      totalItems.value = data.data.totalCount;
+    } catch (err) {
+      loading.value = false;
+      console.error(err);
+    }
+  },
+  1000
+);
 </script>
