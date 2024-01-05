@@ -49,8 +49,14 @@
 </template>
 
 <script setup lang="ts">
+import axios from "axios";
 import md5 from "md5";
 import { userStore } from "@/stores/user";
+import { indexStore } from "@/stores";
+import type { UserInfoRes } from "@/types";
+import { onMounted } from "vue";
+import router from "@/router";
+const { showMsg } = indexStore();
 const user = userStore();
 const links = [
   {
@@ -67,6 +73,30 @@ const toLogin = () => {
   window.location.href =
     "https://api.imlazy.ink/#/oauth2/authorize?client_id=12&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A1238%2F#/oauth2/callback";
 };
+
+const login = async () => {
+  try {
+    const { data }: { data: UserInfoRes } = await axios.post(
+      "/v1/oauth2/nyancy/user",
+      {
+        access_token: localStorage.token,
+      }
+    );
+    user.userInfo = data.data;
+    user.isLogin = true;
+  } catch (err: any) {
+    console.error(err);
+    showMsg(err.response.data.msg || err.message, "red");
+  }
+};
+
+onMounted(async () => {
+  if (localStorage.getItem("token")) {
+    if (router.currentRoute.value.query.code) return;
+    showMsg("正在尝试自动登录...", "blue");
+    await login();
+  }
+});
 </script>
 
 <style lang="scss" scoped>

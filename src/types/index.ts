@@ -21,6 +21,12 @@ export interface Blacklist {
   addTime: string;
 }
 
+export interface TokenRes extends NyaResponse {
+  data: {
+    token: string;
+  };
+}
+
 export interface UserInfoRes extends NyaResponse {
   data: UserInfo;
 }

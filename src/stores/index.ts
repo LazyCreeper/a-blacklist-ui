@@ -11,9 +11,9 @@ export const indexStore = defineStore("indexStore", () => {
 
   const showMsg = (
     msg: string,
-    timeout = 2000,
     color = "",
-    location = "top center"
+    location = "top center",
+    timeout = 2000
   ) => {
     snackbar.value = {
       show: true,

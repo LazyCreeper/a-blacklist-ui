@@ -31,7 +31,7 @@ import { useRouteQuery } from "@vueuse/router";
 import { indexStore } from "@/stores";
 import { userStore } from "@/stores/user";
 import router from "@/router";
-import type { UserInfoRes } from "@/types";
+import type { TokenRes, UserInfoRes } from "@/types";
 import axios from "axios";
 
 const user = userStore();
@@ -43,19 +43,33 @@ const dialog = ref({
   show: false,
   text: "",
   cancel: () => {
-    dialog.value.show = false;
+    // dialog.value.show = false;
+    router.replace("/");
   },
 });
 const redirect = async () => {
   try {
+    const { data }: { data: TokenRes } = await axios.post("/v1/oauth2/nyancy", {
+      code: code.value,
+      state: state.value,
+    });
+    localStorage.setItem("token", data.data.token);
+    login(data.data.token);
+  } catch (err: any) {
+    console.error(err);
+    dialog.value.text = err.response.data.msg || err.message;
+    dialog.value.show = true;
+  }
+};
+
+const login = async (token: string) => {
+  try {
     const { data }: { data: UserInfoRes } = await axios.post(
-      "/v1/oauth2/nyancy",
+      "/v1/oauth2/nyancy/user",
       {
-        code: code.value,
-        state: state.value,
+        access_token: token,
       }
     );
-
     user.userInfo = data.data;
     user.isLogin = true;
     isLoading.value = false;
