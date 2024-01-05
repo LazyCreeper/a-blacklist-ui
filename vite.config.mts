@@ -44,7 +44,8 @@ export default defineConfig({
     port: 1238,
     proxy: {
       "/v1": {
-        target: "http://127.0.0.1:1236",
+        target: "http://127.0.0.1:1236/",
+        rewrite: (path) => path.replace(/^\/v1/, ""),
         changeOrigin: true,
         ws: true
       },
