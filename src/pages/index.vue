@@ -279,6 +279,7 @@ const edit = (item: Blacklist) => {
 };
 
 const add = () => {
+  if (form.value) reset();
   dialog.value.title = "添加";
   dialog.value.show = true;
 };
