@@ -69,7 +69,7 @@ import md5 from "md5";
 import { userStore } from "@/stores/user";
 import { indexStore } from "@/stores";
 import { useMenus } from "@/hooks/useMenus";
-import type { UserInfoRes } from "@/types";
+import type { NyaResponse, UserInfoRes } from "@/types";
 import { onMounted } from "vue";
 import router from "@/router";
 import DarkModeSwitcher from "./DarkModeSwitcher.vue";
@@ -77,9 +77,16 @@ const { showMsg } = indexStore();
 const user = userStore();
 const { menus } = useMenus();
 
-const toLogin = () => {
-  window.location.href =
-    "https://api.imlazy.ink/#/oauth2/authorize?client_id=12&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A1238%2F#/oauth2/callback";
+const toLogin = async () => {
+  try {
+    const { data }: { data: NyaResponse } = await axios.get(
+      "/v1/oauth2/nyancy"
+    );
+    window.location.href = data.data.url;
+  } catch (err: any) {
+    console.error(err);
+    showMsg(err.response.data.msg || err.message, "red");
+  }
 };
 
 const login = async () => {
