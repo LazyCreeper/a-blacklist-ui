@@ -15,21 +15,34 @@
       ></v-btn>
 
       <v-spacer></v-spacer>
-      <div
-        v-if="user.isLogin"
-        class="d-flex align-center"
-        style="cursor: pointer"
-      >
-        <div class="mr-4">{{ user.userInfo?.username }}</div>
-        <v-avatar
-          class="me-4"
-          color="grey-darken-1"
-          :image="`https://cdn.imlazy.ink:233/avatar/${md5(
-            user.userInfo?.email ?? ''
-          )}?s=100&r=R&d=`"
-          size="32"
-        ></v-avatar>
-      </div>
+      <v-menu v-if="user.isLogin">
+        <template v-slot:activator="{ props }">
+          <div
+            v-bind="props"
+            class="d-flex align-center"
+            style="cursor: pointer"
+          >
+            <div class="mr-4">{{ user.userInfo?.username }}</div>
+            <v-avatar
+              class="me-4"
+              color="grey-darken-1"
+              :image="`https://cdn.imlazy.ink:233/avatar/${md5(
+                user.userInfo?.email ?? ''
+              )}?s=100&r=R&d=`"
+              size="32"
+            ></v-avatar>
+          </div>
+        </template>
+        <v-list>
+          <v-list-item
+            prepend-icon="mdi-exit-to-app"
+            title="退出登录"
+            @click="logout"
+          >
+          </v-list-item>
+        </v-list>
+      </v-menu>
+
       <div
         v-else
         class="d-flex align-center"
@@ -80,6 +93,11 @@ const login = async () => {
     console.error(err);
     showMsg(err.response.data.msg || err.message, "red");
   }
+};
+
+const logout = async () => {
+  localStorage.removeItem("token");
+  window.location.reload();
 };
 
 onMounted(async () => {
