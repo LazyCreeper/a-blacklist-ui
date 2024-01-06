@@ -12,6 +12,38 @@ body {
   font-family: MiSans;
 }
 
+.aLink {
+  color: #ff4081 !important;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  text-decoration: none;
+  vertical-align: top;
+  outline: 0;
+
+  &:focus::before,
+  &:hover::before {
+    transform: scaleX(1);
+  }
+
+  &::before {
+    position: absolute;
+    top: auto;
+    bottom: 1px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #ff4081;
+    -webkit-transform: scaleX(0);
+    transform: scaleX(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
+    content: " ";
+  }
+}
+
 .toggleMenu {
   position: fixed;
   top: 46%;
