@@ -189,7 +189,7 @@ const loadItems = _.throttle(
       loading.value = true;
       currentPage.value = page;
       _sortBy.value = sortBy;
-      const { data }: { data: BlacklistRes } = await axios.get("/v1", {
+      const { data }: { data: BlacklistRes } = await axios.get("/v1/", {
         params: {
           page,
           pageSize: itemsPerPage,
@@ -245,13 +245,13 @@ const save = async () => {
   try {
     if (dialog.value.title === "添加") {
       const { data }: { data: NyaResponse } = await axios.post(
-        "/v1",
+        "/v1/",
         formData.value
       );
       showMsg(data.msg, "green");
     } else {
       const { data }: { data: NyaResponse } = await axios.put(
-        `/v1`,
+        `/v1/`,
         formData.value
       );
       showMsg(data.msg, "blue");
@@ -299,7 +299,7 @@ const opeDeleteConfirmDialog = (item: Blacklist) => {
 const del = async () => {
   delBtnLoading.value = true;
   try {
-    const { data }: { data: NyaResponse } = await axios.delete("/v1", {
+    const { data }: { data: NyaResponse } = await axios.delete("/v1/", {
       data: {
         id: formData.value.id,
       },
