@@ -23,18 +23,35 @@
         hover
         @update:options="loadItems"
       >
+        <template v-slot:item.reason="{ item }">
+          <span
+            class="text-truncate"
+            style="max-width: 20vmax; display: block"
+            >{{ item.reason }}</span
+          >
+        </template>
         <template v-slot:item.addTime="{ item }">
           {{ new Date(item.addTime).toLocaleString() }}
         </template>
         <template v-slot:item.operate="{ item }">
           <v-btn
             class="mr-4"
+            icon="mdi-information-outline"
+            variant="text"
+            size="small"
+            @click="showInfo(item)"
+          ></v-btn>
+          <v-btn
+            v-if="isAdmin"
+            class="mr-4"
             icon="mdi-pencil-outline"
             variant="text"
             size="small"
+            color="primary"
             @click="edit(item)"
           ></v-btn>
           <v-btn
+            v-if="isAdmin"
             icon="mdi-trash-can-outline"
             variant="text"
             size="small"
@@ -55,8 +72,9 @@
             <v-col>
               <v-text-field
                 v-model:model-value="formData.qq"
+                :readonly="dialog.title === '详情信息'"
                 label="QQ"
-                clearable
+                :clearable="dialog.title !== '详情信息'"
                 density="compact"
                 variant="outlined"
                 hide-details
@@ -65,8 +83,9 @@
             <v-col>
               <v-text-field
                 v-model:model-value="formData.bilibili"
+                :readonly="dialog.title === '详情信息'"
                 label="B站 UID"
-                clearable
+                :clearable="dialog.title !== '详情信息'"
                 density="compact"
                 variant="outlined"
                 hide-details
@@ -77,8 +96,9 @@
             <v-col>
               <v-textarea
                 v-model:model-value="formData.reason"
+                :readonly="dialog.title === '详情信息'"
                 label="原因"
-                clearable
+                :clearable="dialog.title !== '详情信息'"
                 density="compact"
                 variant="outlined"
                 :rules="[(v) => !!v || '请输入原因']"
@@ -89,10 +109,16 @@
         </v-form>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="red" @click="reset">重置</v-btn>
+        <v-btn v-if="dialog.title !== '详情信息'" color="red" @click="reset"
+          >重置</v-btn
+        >
         <v-spacer></v-spacer>
         <v-btn @click="dialog.cancel">取消</v-btn>
-        <v-btn color="primary" :loading="saveBtnLoading" @click="save"
+        <v-btn
+          v-if="dialog.title !== '详情信息'"
+          color="primary"
+          :loading="saveBtnLoading"
+          @click="save"
           >保存</v-btn
         >
       </v-card-actions>
@@ -106,7 +132,9 @@ import axios from "axios";
 import _ from "lodash";
 import type { BlacklistRes, Blacklist, NyaResponse } from "@/types";
 import { indexStore } from "@/stores";
+import { userStore } from "@/stores/user";
 const { showMsg } = indexStore();
+const { isAdmin } = userStore();
 const itemsPerPage = ref(10);
 const headers = ref([
   { key: "id", title: "ID" },
@@ -217,6 +245,12 @@ const save = async () => {
       sortBy: _sortBy.value,
     });
   }
+};
+
+const showInfo = (item: Blacklist) => {
+  formData.value = _.cloneDeep(item);
+  dialog.value.title = "详情信息";
+  dialog.value.show = true;
 };
 
 const edit = (item: Blacklist) => {
