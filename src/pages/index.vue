@@ -2,16 +2,21 @@
 <template>
   <v-container>
     <v-responsive class="fill-height">
-      <v-text-field
-        v-model:model-value="search"
-        class="mt-2"
-        label="搜索"
-        clearable
-        density="compact"
-        variant="outlined"
-        append-inner-icon="mdi-magnify"
-        hide-details
-      ></v-text-field>
+      <div class="mt-2 d-flex align-center">
+        <v-text-field
+          v-model:model-value="search"
+          class="mr-4"
+          label="搜索"
+          clearable
+          density="compact"
+          variant="outlined"
+          append-inner-icon="mdi-magnify"
+          hide-details
+        ></v-text-field>
+        <v-btn v-if="isAdmin" variant="outlined" color="primary" @click="add"
+          >添加</v-btn
+        >
+      </div>
 
       <v-data-table-server
         v-model:items-per-page="itemsPerPage"
@@ -74,6 +79,7 @@
                 v-model:model-value="formData.qq"
                 :readonly="dialog.title === '详情信息'"
                 label="QQ"
+                type="number"
                 :clearable="dialog.title !== '详情信息'"
                 density="compact"
                 variant="outlined"
@@ -217,6 +223,7 @@ const save = async () => {
   if (!valid) {
     showMsg("请检查表单完整", "red");
     saveBtnLoading.value = false;
+    return;
   }
   try {
     if (dialog.value.title === "添加") {
@@ -256,6 +263,11 @@ const showInfo = (item: Blacklist) => {
 const edit = (item: Blacklist) => {
   formData.value = _.cloneDeep(item);
   dialog.value.title = `编辑（${item.id}）`;
+  dialog.value.show = true;
+};
+
+const add = () => {
+  dialog.value.title = `添加`;
   dialog.value.show = true;
 };
 </script>

@@ -7,6 +7,7 @@ export const userStore = defineStore("userStore", () => {
   const userInfo = ref<UserInfo>();
 
   const isAdmin = computed(() => userInfo.value?.role === "admin");
+
   return {
     isLogin,
     userInfo,
