@@ -5,7 +5,6 @@
       <div class="mt-2 d-flex align-center">
         <v-text-field
           v-model:model-value="search"
-          class="mr-4"
           label="搜索"
           clearable
           density="compact"
@@ -13,7 +12,12 @@
           append-inner-icon="mdi-magnify"
           hide-details
         ></v-text-field>
-        <v-btn v-if="isAdmin" variant="outlined" color="primary" @click="add"
+        <v-btn
+          v-if="isAdmin"
+          class="ml-4"
+          variant="outlined"
+          color="primary"
+          @click="add"
           >添加</v-btn
         >
       </div>
@@ -26,6 +30,7 @@
         :loading="loading"
         :search="search"
         hover
+        color="transparent"
         @update:options="loadItems"
       >
         <template v-slot:item.reason="{ item }">

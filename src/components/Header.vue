@@ -11,13 +11,14 @@
         variant="text"
         :to="link.to"
         class="mr-4"
-        color="brown-darken-3 only-desktop"
       ></v-btn>
 
       <v-spacer></v-spacer>
+      <DarkModeSwitcher class="mr-4" />
       <v-menu v-if="user.isLogin">
         <template v-slot:activator="{ props }">
           <div
+            v-ripple
             v-bind="props"
             class="d-flex align-center"
             style="cursor: pointer"
@@ -47,6 +48,7 @@
         v-else
         class="d-flex align-center"
         style="cursor: pointer"
+        v-ripple
         @click="toLogin()"
       >
         <div class="mr-4">未登录</div>
@@ -70,6 +72,7 @@ import { useMenus } from "@/hooks/useMenus";
 import type { UserInfoRes } from "@/types";
 import { onMounted } from "vue";
 import router from "@/router";
+import DarkModeSwitcher from "./DarkModeSwitcher.vue";
 const { showMsg } = indexStore();
 const user = userStore();
 const { menus } = useMenus();

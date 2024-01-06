@@ -1,6 +1,13 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
+import { useStorage } from "@vueuse/core";
+
 export const indexStore = defineStore("indexStore", () => {
+  const isDarkMode = useStorage<boolean>(
+    "isDarkMode",
+    localStorage.isDarkMode === "true"
+  );
+
   const snackbar = ref({
     show: false,
     text: "",
@@ -26,6 +33,7 @@ export const indexStore = defineStore("indexStore", () => {
 
   const drawer = ref(false);
   return {
+    isDarkMode,
     snackbar,
     showMsg,
     drawer,

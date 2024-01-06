@@ -69,6 +69,12 @@ body {
   display: none;
 }
 
+.v-theme--dark {
+  .v-table {
+    background: unset;
+  }
+}
+
 @media (max-width: 450px) {
   .only-desktop {
     display: none;
