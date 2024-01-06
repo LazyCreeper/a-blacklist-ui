@@ -5,13 +5,13 @@
         <a href="javascript:;" class="text-decoration-none">A Blacklist</a>
       </div>
       <v-btn
-        v-for="link in links"
+        v-for="link in menus"
         :key="link.name"
         :text="link.name"
         variant="text"
         :to="link.to"
         class="mr-4"
-        color="brown-darken-3"
+        color="brown-darken-3 only-desktop"
       ></v-btn>
 
       <v-spacer></v-spacer>
@@ -53,21 +53,13 @@ import axios from "axios";
 import md5 from "md5";
 import { userStore } from "@/stores/user";
 import { indexStore } from "@/stores";
+import { useMenus } from "@/hooks/useMenus";
 import type { UserInfoRes } from "@/types";
 import { onMounted } from "vue";
 import router from "@/router";
 const { showMsg } = indexStore();
 const user = userStore();
-const links = [
-  {
-    name: "首页",
-    to: "/",
-  },
-  {
-    name: "关于",
-    to: "about",
-  },
-];
+const { menus } = useMenus();
 
 const toLogin = () => {
   window.location.href =

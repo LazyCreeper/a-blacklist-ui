@@ -11,3 +11,38 @@
 body {
   font-family: MiSans;
 }
+
+.toggleMenu {
+  position: fixed;
+  top: 46%;
+  left: 0px;
+  background-color: #ff4081;
+  width: 8px;
+  height: 70px;
+  text-align: center;
+  z-index: 1006;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  cursor: pointer;
+  box-shadow: 1px 2px 2px rgb(0 0 0 / 25%);
+  transition: width 0.4s, background-color 0.4s;
+
+  &:hover {
+    background-color: #ff7ca7;
+    width: 20px;
+  }
+}
+
+.only-phone {
+  display: none;
+}
+
+@media (max-width: 450px) {
+  .only-desktop {
+    display: none;
+  }
+
+  .only-phone {
+    display: unset;
+  }
+}

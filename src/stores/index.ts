@@ -23,8 +23,11 @@ export const indexStore = defineStore("indexStore", () => {
       location,
     };
   };
+
+  const drawer = ref(false);
   return {
     snackbar,
     showMsg,
+    drawer,
   };
 });
