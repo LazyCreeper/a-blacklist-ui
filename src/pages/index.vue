@@ -40,8 +40,8 @@
             >{{ item.reason }}</span
           >
         </template>
-        <template v-slot:item.addTime="{ item }">
-          {{ new Date(item.addTime).toLocaleString() }}
+        <template v-slot:item.violateTime="{ item }">
+          {{ new Date(item.violateTime).toLocaleString() }}
         </template>
         <template v-slot:item.operate="{ item }">
           <v-btn
@@ -96,6 +96,30 @@
                 v-model:model-value="formData.bilibili"
                 :readonly="dialog.title === '详情信息'"
                 label="B站 UID"
+                :clearable="dialog.title !== '详情信息'"
+                density="compact"
+                variant="outlined"
+                hide-details
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model:model-value="formData.violateTime"
+                :readonly="dialog.title === '详情信息'"
+                label="违法时间"
+                :clearable="dialog.title !== '详情信息'"
+                density="compact"
+                variant="outlined"
+                hide-details
+              ></v-text-field>
+            </v-col>
+            <v-col>
+              <v-text-field
+                v-model:model-value="formData.updateAt"
+                :readonly="dialog.title === '详情信息'"
+                label="最后更新"
                 :clearable="dialog.title !== '详情信息'"
                 density="compact"
                 variant="outlined"
@@ -163,7 +187,7 @@ const headers = ref([
   { key: "id", title: "ID" },
   { key: "qq", title: "QQ" },
   { key: "reason", title: "原因" },
-  { key: "addTime", title: "添加时间" },
+  { key: "violateTime", title: "违法时间" },
   { key: "operate", title: "操作", sortable: false },
 ]);
 const search = ref("");
@@ -216,7 +240,7 @@ const formData = ref<Blacklist>({
   qq: "",
   bilibili: "",
   reason: "",
-  addTime: "",
+  violateTime: new Date(),
 });
 
 const reset = () => {
@@ -273,12 +297,20 @@ const save = async () => {
 
 const showInfo = (item: Blacklist) => {
   formData.value = _.cloneDeep(item);
+  formData.value.violateTime = new Date(
+    formData.value.violateTime
+  ).toLocaleString();
+  formData.value.updateAt = new Date(formData.value.updateAt).toLocaleString();
   dialog.value.title = "详情信息";
   dialog.value.show = true;
 };
 
 const edit = (item: Blacklist) => {
   formData.value = _.cloneDeep(item);
+  formData.value.violateTime = new Date(
+    formData.value.violateTime
+  ).toLocaleString();
+  formData.value.updateAt = new Date(formData.value.updateAt).toLocaleString();
   dialog.value.title = `编辑（${item.id}）`;
   dialog.value.show = true;
 };

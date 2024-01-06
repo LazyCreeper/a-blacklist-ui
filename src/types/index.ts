@@ -18,7 +18,8 @@ export interface Blacklist {
   qq: string;
   bilibili: string;
   reason: string;
-  addTime: string;
+  violateTime: any;
+  updateAt?: any;
 }
 
 export interface TokenRes extends NyaResponse {
