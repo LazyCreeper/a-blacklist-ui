@@ -61,7 +61,7 @@
             variant="text"
             size="small"
             color="red"
-            @click="edit(item)"
+            @click="opeDeleteConfirmDialog(item)"
           ></v-btn>
         </template>
       </v-data-table-server>
@@ -127,6 +127,18 @@
           @click="save"
           >保存</v-btn
         >
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog v-model="deleteConfirmDialog" persistent width="500">
+    <v-card color="red">
+      <v-card-title> 警告 </v-card-title>
+      <v-card-text> 你真的要删除这条吗？ </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn @click="deleteConfirmDialog = false">取消</v-btn>
+        <v-btn color="black" :loading="delBtnLoading" @click="del">确定</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -267,7 +279,36 @@ const edit = (item: Blacklist) => {
 };
 
 const add = () => {
-  dialog.value.title = `添加`;
+  dialog.value.title = "添加";
   dialog.value.show = true;
+};
+
+// 待优化
+const deleteConfirmDialog = ref(false);
+const delBtnLoading = ref(false);
+const opeDeleteConfirmDialog = (item: Blacklist) => {
+  formData.value = _.cloneDeep(item);
+  deleteConfirmDialog.value = true;
+};
+const del = async () => {
+  delBtnLoading.value = true;
+  try {
+    const { data }: { data: NyaResponse } = await axios.delete("/v1", {
+      data: {
+        id: formData.value.id,
+      },
+    });
+    showMsg(data.msg, "green");
+  } catch (err: any) {
+    console.error(err);
+    showMsg(err.response.data.msg || err.message, "red");
+  } finally {
+    deleteConfirmDialog.value = delBtnLoading.value = false;
+    loadItems({
+      page: currentPage.value,
+      itemsPerPage: itemsPerPage.value,
+      sortBy: _sortBy.value,
+    });
+  }
 };
 </script>
