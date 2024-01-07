@@ -240,7 +240,7 @@ const formData = ref<Blacklist>({
   qq: "",
   bilibili: "",
   reason: "",
-  violateTime: new Date(),
+  violateTime: new Date().toLocaleString(),
 });
 
 const reset = () => {
