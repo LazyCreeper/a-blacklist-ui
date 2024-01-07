@@ -10,7 +10,7 @@
         :text="link.name"
         variant="text"
         :to="link.to"
-        class="mr-4"
+        class="mr-4 only-desktop"
       ></v-btn>
 
       <v-spacer></v-spacer>
