@@ -34,10 +34,17 @@ export interface UserInfoRes extends NyaResponse {
 
 export interface UserInfo {
   id: number;
-  username: string;
-  uuid: string;
-  status: number;
-  role: string;
+  name: string;
   email: string;
+  role: string;
+  status: number;
   regTime: string;
+}
+
+export interface UserListRes extends NyaResponse {
+  data: {
+    totalCount: number;
+    totalPages: number;
+    users: UserInfo[];
+  };
 }

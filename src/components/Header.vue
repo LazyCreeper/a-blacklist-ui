@@ -102,6 +102,10 @@ const login = async () => {
   } catch (err: any) {
     console.error(err);
     showMsg(err.response.data.msg || err.message, "red");
+    // 额，，预留优化空间
+    if (err.response.data.msg.includes("被封禁")) {
+      localStorage.removeItem("token");
+    }
   }
 };
 
