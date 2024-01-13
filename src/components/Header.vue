@@ -23,7 +23,7 @@
             class="d-flex align-center"
             style="cursor: pointer"
           >
-            <div class="mr-4">{{ user.userInfo?.username }}</div>
+            <div class="mr-4">{{ user.userInfo?.name }}</div>
             <v-avatar
               class="me-4"
               color="grey-darken-1"
@@ -80,7 +80,7 @@ const { menus } = useMenus();
 const toLogin = async () => {
   try {
     const { data }: { data: NyaResponse } = await axios.get(
-      "/v1/oauth2/nyancy"
+      "/v1/oauth2/nyancy/?t=" + Date.now()
     );
     window.location.href = data.data.url;
   } catch (err: any) {
@@ -92,7 +92,7 @@ const toLogin = async () => {
 const login = async () => {
   try {
     const { data }: { data: UserInfoRes } = await axios.post(
-      "/v1/oauth2/nyancy/user",
+      "/v1/oauth2/nyancy/user/?t=" + Date.now(),
       {
         access_token: localStorage.token,
       }
