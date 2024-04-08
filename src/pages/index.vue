@@ -178,10 +178,12 @@ import { ref } from "vue";
 import axios from "axios";
 import _ from "lodash";
 import type { BlacklistRes, Blacklist, NyaResponse } from "@/types";
+import { storeToRefs } from "pinia";
 import { indexStore } from "@/stores";
 import { userStore } from "@/stores/user";
+
 const { showMsg } = indexStore();
-const { isAdmin } = userStore();
+const { isAdmin } = storeToRefs(userStore());
 const itemsPerPage = ref(10);
 const headers = ref([
   { key: "id", title: "ID" },

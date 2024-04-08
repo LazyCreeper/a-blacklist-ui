@@ -15,7 +15,7 @@
 
       <v-spacer></v-spacer>
       <DarkModeSwitcher class="mr-4" />
-      <v-menu v-if="user.isLogin">
+      <v-menu v-if="isLogin">
         <template v-slot:activator="{ props }">
           <div
             v-ripple
@@ -23,12 +23,12 @@
             class="d-flex align-center"
             style="cursor: pointer"
           >
-            <div class="mr-4">{{ user.userInfo?.name }}</div>
+            <div class="mr-4">{{ userInfo?.name }}</div>
             <v-avatar
               class="me-4"
               color="grey-darken-1"
               :image="`https://cdn.imlazy.ink:233/avatar/${md5(
-                user.userInfo?.email ?? ''
+                userInfo?.email ?? ''
               )}?s=100&r=R&d=`"
               size="32"
             ></v-avatar>
@@ -68,12 +68,13 @@ import axios from "axios";
 import md5 from "md5";
 import { userStore } from "@/stores/user";
 import { indexStore } from "@/stores";
+import { storeToRefs } from "pinia";
 import { useMenus } from "@/hooks/useMenus";
 import type { NyaResponse, UserInfoRes } from "@/types";
 import { onMounted } from "vue";
 import DarkModeSwitcher from "./DarkModeSwitcher.vue";
 const { showMsg } = indexStore();
-const user = userStore();
+const { userInfo, isLogin } = storeToRefs(userStore());
 const { menus } = useMenus();
 
 const toLogin = async () => {
@@ -96,8 +97,8 @@ const login = async () => {
         access_token: localStorage.token,
       }
     );
-    user.userInfo = data.data;
-    user.isLogin = true;
+    userInfo.value = data.data;
+    isLogin.value = true;
   } catch (err: any) {
     console.error(err);
     showMsg(err.response.data.msg || err.message, "red");
