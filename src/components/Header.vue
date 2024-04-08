@@ -71,7 +71,6 @@ import { indexStore } from "@/stores";
 import { useMenus } from "@/hooks/useMenus";
 import type { NyaResponse, UserInfoRes } from "@/types";
 import { onMounted } from "vue";
-import router from "@/router";
 import DarkModeSwitcher from "./DarkModeSwitcher.vue";
 const { showMsg } = indexStore();
 const user = userStore();
@@ -85,7 +84,7 @@ const toLogin = async () => {
     window.location.href = data.data.url;
   } catch (err: any) {
     console.error(err);
-    showMsg(err.response.data.msg || err.message, "red");
+    showMsg(err.response?.data.msg || err.message, "red");
   }
 };
 
@@ -116,7 +115,7 @@ const logout = async () => {
 
 onMounted(async () => {
   if (localStorage.getItem("token")) {
-    if (router.currentRoute.value.query.code) return;
+    if (location.hash.includes("code=")) return;
     showMsg("正在尝试自动登录...", "blue");
     await login();
   }
