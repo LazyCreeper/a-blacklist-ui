@@ -93,13 +93,14 @@
             </v-col>
             <v-col>
               <v-text-field
-                v-model:model-value="formData.bilibili"
+                v-model:model-value="formData.email"
                 :readonly="dialog.title === '详情信息'"
-                label="B站 UID"
+                label="邮箱"
                 :clearable="dialog.title !== '详情信息'"
                 density="compact"
                 variant="outlined"
                 hide-details
+                type="email"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -243,7 +244,7 @@ const form = ref();
 const formData = ref<Blacklist>({
   id: 0,
   qq: "",
-  bilibili: "",
+  email: "",
   reason: "",
   violateTime: dayjs().format("YYYY/M/D HH:mm:ss"),
 });

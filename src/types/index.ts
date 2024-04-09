@@ -16,7 +16,7 @@ export interface BlacklistRes extends NyaResponse {
 export interface Blacklist {
   id: number;
   qq: string;
-  bilibili: string;
+  email: string;
   reason: string;
   violateTime: any;
   updateAt?: any;
