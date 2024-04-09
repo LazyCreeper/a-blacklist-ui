@@ -181,6 +181,9 @@ import type { BlacklistRes, Blacklist, NyaResponse } from "@/types";
 import { storeToRefs } from "pinia";
 import { indexStore } from "@/stores";
 import { userStore } from "@/stores/user";
+import dayjs from "dayjs";
+import "dayjs/locale/zh-cn";
+dayjs.locale("zh-cn");
 
 const { showMsg } = indexStore();
 const { isAdmin } = storeToRefs(userStore());
@@ -242,11 +245,12 @@ const formData = ref<Blacklist>({
   qq: "",
   bilibili: "",
   reason: "",
-  violateTime: new Date().toLocaleString(),
+  violateTime: dayjs().format("YYYY/M/D HH:mm:ss"),
 });
 
 const reset = () => {
   form.value.reset();
+  formData.value.violateTime = dayjs().format("YYYY/M/D HH:mm:ss");
 };
 
 const dialog = ref({
